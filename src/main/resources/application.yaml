@@ -1,0 +1,16 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /studylearn
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3307/studylearn"
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  signerKey: "f49a558f3de1f49910658775226857f718d2dcfc24f6eaaa41898a19755fa812"
