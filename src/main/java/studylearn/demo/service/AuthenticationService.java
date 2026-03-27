@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,10 +30,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.StringJoiner;
 
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
     StudentRepository studentRepository;
@@ -82,10 +83,29 @@ public class AuthenticationService {
             throw new RuntimeException(e);
         }
     }
-    private String buildScope(Student student){
-        StringJoiner stringJoiner =new StringJoiner(" ");
-        if(!CollectionUtils.isEmpty(student.getRoles()))
-            student.getRoles().forEach(stringJoiner::add);
-        return stringJoiner.toString();
+    private String buildScope(Student student) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+
+        if (!CollectionUtils.isEmpty(student.getRoles())) {
+            student.getRoles().forEach(role -> {
+                // 1. Thêm Role (Ví dụ: ROLE_ADMIN)
+                stringJoiner.add("ROLE_"+role.getName());
+                // 2. Thêm Permissions của Role đó
+                if (!CollectionUtils.isEmpty(role.getPermissions())) {
+                    role.getPermissions().forEach(permission -> {
+                        stringJoiner.add(permission.getName());
+                        log.info("Đã thêm Permission: {} cho Role: {}", permission.getName(), role.getName());
+                    });
+                } else {
+                    log.warn("Role {} này không có permission nào trong DB!", role.getName());
+                }
+            });
+        } else {
+            log.error("User {} không có bất kỳ Role nào!", student.getUserName());
+        }
+
+        String scope = stringJoiner.toString();
+        log.info("===> CHUỖI SCOPE CUỐI CÙNG: [{}]", scope);
+        return scope;
     }
 }

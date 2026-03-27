@@ -19,6 +19,7 @@ import studylearn.demo.enums.Role;
 import studylearn.demo.exception.AppException;
 import studylearn.demo.exception.ErrorCode;
 import studylearn.demo.mapper.StudentMapper;
+import studylearn.demo.repository.RoleRepository;
 import studylearn.demo.repository.StudentRepository;
 
 import java.util.HashSet;
@@ -30,10 +31,9 @@ import java.util.Optional;
 @Slf4j
 @FieldDefaults(level= AccessLevel.PRIVATE,makeFinal=true)
 public class StudentService {
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private StudentMapper studentMapper;
+    StudentRepository studentRepository;
+    RoleRepository roleRepository;
+    StudentMapper studentMapper;
     PasswordEncoder passwordEncoder;
     public Student createStudent(StudentCreationRequest request){
         if(studentRepository.existsByUserName(request.getUserName()))
@@ -43,7 +43,7 @@ public class StudentService {
         student.setPassWord(passwordEncoder.encode(request.getPassWord()));
         HashSet<String> roles=new HashSet<>();
         roles.add(Role.USER.name());
-        student.setRoles(roles);
+        //student.setRoles(roles);
         return studentRepository.save(student);
     }
     public StudentResponse getMyInfo(){
@@ -53,8 +53,11 @@ public class StudentService {
         return studentMapper.toStudentResponse(student);
     }
     public StudentResponse updateStudent(String studentId, StudentUpdateRequest request){
-        Student student=studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found"));
+        Student student=studentRepository.findById(studentId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         studentMapper.updateStudent(student,request);
+        student.setPassWord(passwordEncoder.encode(request.getPassWord()));
+        var roles=roleRepository.findAllById(request.getRoles());
+        student.setRoles(new HashSet<>(roles));
         return studentMapper.toStudentResponse(studentRepository.save(student));
     }
     public void deleteStudent(String studentId){

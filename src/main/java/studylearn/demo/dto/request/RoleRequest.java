@@ -1,17 +1,17 @@
-package studylearn.demo.entity;
+package studylearn.demo.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level= AccessLevel.PRIVATE)
-public class Teacher {
-    String email;
-    String phoneNumber;
-    String dob;
-    String faculty;
-    String email;
+public class RoleRequest {
+    String name;
+    String description;
+    Set<String>permissions;
 }

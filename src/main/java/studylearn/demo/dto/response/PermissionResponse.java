@@ -1,4 +1,4 @@
-package studylearn.demo.dto.request;
+package studylearn.demo.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +8,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level= AccessLevel.PRIVATE)
-public class IntrospectRequest {
-    String token;
+public class PermissionResponse {
+    String name;
+    String description;
+
 }

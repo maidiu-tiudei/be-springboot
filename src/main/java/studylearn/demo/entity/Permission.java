@@ -2,12 +2,9 @@ package studylearn.demo.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.Set;
 @Getter
 @Setter
 @Builder
@@ -15,12 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class User {
+public class Permission {
     @Id
-    private String id;
-    private String userName;
-    private String passWord;
-    LocalDate dob;
-    @ManyToMany
-    Set<Role> roles;
+    String name;
+    String description;
 }

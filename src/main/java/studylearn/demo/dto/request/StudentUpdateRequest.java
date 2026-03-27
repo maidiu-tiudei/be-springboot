@@ -1,19 +1,25 @@
 package studylearn.demo.dto.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE)
 public class StudentUpdateRequest {
-    private String passWord;
-    private String className ;
-    private String major;
-    private String faculty;
-    private String email;
-    private String phoneNumber;
-    private String address;
-
+    String passWord;
+    String className ;
+    String major;
+    String faculty;
+    String email;
+    String phoneNumber;
+    String address;
+    List<String> roles;
 //    public String getStudentId() {
 //        return studentId;
 //    }

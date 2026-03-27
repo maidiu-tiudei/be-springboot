@@ -1,8 +1,6 @@
 package studylearn.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -27,5 +25,6 @@ public class Student {
     String phoneNumber;
     String address;
     String passWord;
-    Set<String>roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Role>roles;
 }

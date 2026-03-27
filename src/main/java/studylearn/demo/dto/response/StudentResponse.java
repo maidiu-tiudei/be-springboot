@@ -22,5 +22,5 @@ public class StudentResponse {
     String phoneNumber;
     String address;
 //    String passWord;
-    Set<String> roles;
+    Set<RoleResponse> roles;
 }
